@@ -37,7 +37,7 @@ res.json({ message: "Bienvenido Node backend 2023" });
 // set port, listen for requests
 require("./app/routes/venta.route")(app);
 require("./app/routes/restaurante.route")(app);
-
+require("./app/routes/cliente.route")(app);
 const PORT = process.env.PORT || 9090;
 
 app.listen(PORT, () => {
