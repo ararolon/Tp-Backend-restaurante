@@ -30,12 +30,12 @@ db.Sequelize = Sequelize;
 
 db.sequelize = sequelize;
 
-db.Ventas = require("./venta.model.js")(sequelize, Sequelize);
-db.Mesa = require("./mesa.model.js")(sequelize,Sequelize);
-db.Restaurantes = require ("./restaurante.model.js")(sequelize,Sequelize);
+db.Ventas = require("./venta.models.js")(sequelize, Sequelize);
+db.Mesa = require("./mesa.models.js")(sequelize,Sequelize);
+db.Restaurantes = require ("./restaurante.models.js")(sequelize,Sequelize);
 db.Restaurantes.hasMany(db.Mesa, {as: 'mesa', foreignKey: 'id_restaurante'});
-db.Cliente = require ("./cliente.model.js")(sequelize,Sequelize);
-
+db.Cliente = require ("./cliente.models.js")(sequelize,Sequelize);
+db.Reserva = require("./reserva.models.js")(sequelize, Sequelize);
 
 
 module.exports = db;
