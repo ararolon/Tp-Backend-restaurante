@@ -58,3 +58,32 @@ select{
   gap: 16px;
 }
 
+
+  /* Estilos de la tabla */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  th, td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #222;
+  }
+  
+  /* Estilos de la primera fila (encabezados) */
+  th {
+    background-color: #181818;
+    font-weight: bold;
+  }
+  
+  /* Estilos de las filas impares */
+  tr:nth-child(odd) {
+    background-color: #1d1919;
+  }
+  
+  /* Estilos de las filas pares */
+  tr:nth-child(even) {
+    background-color: #2a2323;
+  }
+

@@ -16,6 +16,15 @@ module.exports = (sequelize, Sequelize) => {
         },
         cantidad_solicitada:{
             type:Sequelize.INTEGER
+        },
+        id_mesa:{
+            type:Sequelize.BIGINT
+        },
+        id_restaurante:{
+            type:Sequelize.BIGINT
+        },
+        id_cliente:{
+            type:Sequelize.BIGINT
         }
     });
     return Reserva;

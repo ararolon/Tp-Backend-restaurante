@@ -76,3 +76,25 @@ button:focus-visible {
 .radio-select label{
   text-align: start;
 }
+
+.mesas{
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  justify-content: start;
+  align-items: center;
+  margin-top: 16px;
+}
+
+.filtros{
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  justify-content: start;
+  align-items: center;
+  margin-top: 16px;
+}
+
+body{
+  background-image: url('fondo.jpeg');
+}
