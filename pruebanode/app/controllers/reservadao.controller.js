@@ -206,8 +206,8 @@ exports.getReservasDisponibles = async (req, res) => {
     }
     res.send(mesasDisponibles);
   } catch (error) {
-    console.log("error:", err);
-    res.status(500).send(err);
+    console.log("error:", error);
+    res.status(500).send(error);
   }
 };
 
