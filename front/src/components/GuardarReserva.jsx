@@ -54,7 +54,8 @@ export default function GuardarReserva({
   );
 }
 
-const BuscarCliente = ({ onChange }) => {
+
+export const BuscarCliente = ({ onChange }) => {
   const [cliente, setCliente] = useState("");
   const [clienteEncontrado, setClienteEncontrado] = useState(undefined);
   //   const cliente = useGetClienteByCedula(cedula);
