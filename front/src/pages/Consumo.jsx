@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { getRestaurantes } from "../api";
 import GuardarReserva, { BuscarCliente } from "../components/GuardarReserva";
 import useFetch from "../hooks/useFetch";
-import {useQuery} from "@tanstack/react-query";
+import {useMutation, useQuery} from "@tanstack/react-query";
 import axios from "axios";
 
 const fetchMesas = async (restaurante) => {
@@ -34,6 +34,13 @@ const fetchProductos = async () => {
   const response = await axios.get(`http://localhost:9090/api/producto`);
   return response.data;
 };
+
+//http://localhost:9090/api/consumo editar
+const editarConsumoAPI = async (consumo) => {
+  const response = await axios.put(`http://localhost:9090/api/consumo`, consumo);
+  return response.data;
+};
+
 
 export default function Consumo() {
   
@@ -72,6 +79,14 @@ export default function Consumo() {
     const { data: productos } = useQuery({
       queryKey: ['productos'],
       queryFn: () => fetchProductos()
+    })
+
+    //usemutation 
+    const { mutate: editarConsumo } = useMutation({
+      mutationFn: editarConsumoAPI,
+      onSuccess: () => {
+        queryClient.invalidateQueries('consumo')
+      },
     })
 
     console.log({consumo})
@@ -131,7 +146,8 @@ export default function Consumo() {
           <BuscarCliente
           onChange={(cliente) => {
             console.log (cliente)
-            console.log ('mimir')
+            console.log(consumo.id)
+            editarConsumo({ id:consumo.id, id_cliente: cliente.id });
             //setReserva({ ...reserva, id_cliente: cliente.id });
           }}
         />
