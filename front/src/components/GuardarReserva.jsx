@@ -55,7 +55,7 @@ export default function GuardarReserva({
 }
 
 
-export const BuscarCliente = ({ onChange }) => {
+export const BuscarCliente = ({ onChange, clienteCreado }) => {
   const [cliente, setCliente] = useState("");
   const [clienteEncontrado, setClienteEncontrado] = useState(undefined);
   //   const cliente = useGetClienteByCedula(cedula);
@@ -86,13 +86,14 @@ export const BuscarCliente = ({ onChange }) => {
             setCliente({ ...cliente, cedula: e.target.value });
           }}
         />
-        <button onClick={handleClick}>Buscar cliente</button>
+        <button onClick={()=>handleClick(cliente)}>Buscar cliente</button>
       </div>
       {clienteEncontrado == false && (
         <RegistarCliente
           cedula={cliente.cedula}
           onChange={() => {
-            handleClick();
+            handleClick(cliente);
+            clienteCreado(cliente)
           }}
         />
       )}

@@ -1,12 +1,12 @@
-import { useEffect, useState } from "react";
-import { getRestaurantes } from "../api";
-import GuardarReserva, { BuscarCliente } from "../components/GuardarReserva";
-import useFetch from "../hooks/useFetch";
-import {useMutation, useQuery} from "@tanstack/react-query";
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { ConsumoAbierto } from "../components/ConsumoAbierto";
 
 const fetchMesas = async (restaurante) => {
-  const response = await axios.get(`http://localhost:9090/api/mesa/restaurantes/${restaurante}`);
+  const response = await axios.get(
+    `http://localhost:9090/api/mesa/restaurantes/${restaurante}`
+  );
   return response.data;
 };
 
@@ -16,82 +16,33 @@ const fetchRestaurantes = async () => {
 };
 
 const fetchMesaOcupada = async (mesa) => {
-  const response = await axios.get(`http://localhost:9090/api/consumo/estaOcupada/${mesa}`);
+  const response = await axios.get(
+    `http://localhost:9090/api/consumo/estaOcupada/${mesa}`
+  );
   return response.data;
 };
-
-const fetchDetalleConsumo = async (mesa) => { 
-  const response = await axios.get(`http://localhost:9090/api/consumo/detalle/${mesa}`);
-  return response.data;
-};
-
-const fetchClientes = async () => {
-  const response = await axios.get(`http://localhost:9090/api/cliente`);
-  return response.data;
-};
-
-const fetchProductos = async () => {
-  const response = await axios.get(`http://localhost:9090/api/producto`);
-  return response.data;
-};
-
-//http://localhost:9090/api/consumo editar
-const editarConsumoAPI = async (consumo) => {
-  const response = await axios.put(`http://localhost:9090/api/consumo`, consumo);
-  return response.data;
-};
-
 
 export default function Consumo() {
-  
-    const [restaurante, setRestaurante] = useState();
+  const [restaurante, setRestaurante] = useState();
 
-    const [mesa, setMesa] = useState();
+  const [mesa, setMesa] = useState();
 
-    const { data: restaurantes } = useQuery({
-      queryKey: ['restaurantes'],
-      queryFn: fetchRestaurantes
-    })
-  
-    const { data: mesas } = useQuery({
-      queryKey: ['mesas', restaurante],
-      queryFn: () => fetchMesas(restaurante),
-      enabled: !!restaurante,
-    })
+  const { data: restaurantes } = useQuery({
+    queryKey: ["restaurantes"],
+    queryFn: fetchRestaurantes,
+  });
 
-    const { data: consumo } = useQuery({
-      queryKey: ['consumo', mesa?.id],
-      queryFn: () => fetchMesaOcupada(mesa?.id),
-      enabled: !!mesa,
-    })
+  const { data: mesas } = useQuery({
+    queryKey: ["mesas", restaurante],
+    queryFn: () => fetchMesas(restaurante),
+    enabled: !!restaurante,
+  });
 
-    const { data: detalleConsumo } = useQuery({
-      queryKey: ['detalleConsumo', consumo?.id],
-      queryFn: () => fetchDetalleConsumo(consumo?.id),
-      enabled: !!consumo,
-    })
-    
-    const { data: clientes } = useQuery({
-      queryKey: ['clientes'],
-      queryFn: () => fetchClientes()
-    })
-
-    const { data: productos } = useQuery({
-      queryKey: ['productos'],
-      queryFn: () => fetchProductos()
-    })
-
-    //usemutation 
-    const { mutate: editarConsumo } = useMutation({
-      mutationFn: editarConsumoAPI,
-      onSuccess: () => {
-        queryClient.invalidateQueries('consumo')
-      },
-    })
-
-    console.log({consumo})
-    console.log({detalleConsumo})
-    console.log({mesa})
+  const { data: consumo } = useQuery({
+    queryKey: ["consumo", mesa?.id],
+    queryFn: () => fetchMesaOcupada(mesa?.id),
+    enabled: !!mesa,
+  });
 
   return (
     <div className="formulario">
@@ -107,10 +58,13 @@ export default function Consumo() {
               </option>
             );
           })}
-          
       </select>
       <h2>Seleccionar Mesa</h2>
-      <select onChange={(e) => setMesa(mesas.find((mesa) => mesa.id === e.target.value))}>
+      <select
+        onChange={(e) =>
+          setMesa(mesas.find((mesa) => mesa.id === e.target.value))
+        }
+      >
         <option>---</option>
         {mesas?.length > 0 &&
           mesas.map((mesa) => {
@@ -120,41 +74,16 @@ export default function Consumo() {
               </option>
             );
           })}
-          
       </select>
-      {consumo?.estado == "abierto" ? (
-        <>
-          <h4>Mesa Ocupada</h4>
-          <h2>Consumo actual</h2>
-          <ul>
-            {
-              detalleConsumo?.map((detalle) => {
-                return (
-                  <p key={detalle.id}>
-                    {detalle.cantidad} - {(productos.find(producto=>producto.id == detalle.id_producto)).nombre}
-                  </p>
-                );
-              })
-            }
-          
-          </ul>
-          <h2>Consumo total</h2>
-          <p>{consumo.total}</p>
-          <h2>Cliente</h2>
-          <h3>Ingrese cedula para cambiar el cliente </h3>
-          <p>{(clientes.find(cliente=>cliente.id == consumo.id_cliente)).nombre}</p>
-          <BuscarCliente
-          onChange={(cliente) => {
-            console.log (cliente)
-            console.log(consumo.id)
-            editarConsumo({ id:consumo.id, id_cliente: cliente.id });
-            //setReserva({ ...reserva, id_cliente: cliente.id });
-          }}
+        <ConsumoAbierto
+          mesa={mesa}
+          consumo={consumo}
+          estaAbierto={consumo == ""}
         />
-        </>
+      {/* {consumo?.estado == "abierto" ? (
       ) : (
-        <h2>Mesa Disponible</h2>
-      )}  
+        <h2>Mesa no está ocupada</h2>
+      )} */}
     </div>
   );
 }

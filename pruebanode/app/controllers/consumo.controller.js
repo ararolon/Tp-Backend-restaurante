@@ -153,7 +153,7 @@ exports.getDetalles=  async (req, res)=>{
 exports.addDetalles =  async (req, res)=>{
     if( !(req.body.id_consumo && req.body.id_producto && req.body.cantidad ) ){
         res.status(400).send({
-            message: "Debe enviar el id_cabecera , id_mesa, cantidad"
+            message: "Debe enviar el id_consumo, id_producto y cantidad"
         });
     }
     else{
@@ -194,7 +194,7 @@ exports.isTakenRest=async  (req, res)=>{
         res.send(data)
     }
     else{
-        res.send({})
+        res.send(null)
     }
 
 }
